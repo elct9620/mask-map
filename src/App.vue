@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Map />
+    <Map :points="pharmacies" />
   </div>
 </template>
 
@@ -11,6 +11,21 @@ export default {
   name: 'app',
   components: {
     Map
+  },
+  data() {
+    return {
+      pharmacies: []
+    }
+  },
+  async mounted() {
+    this.pharmacies = await this.getPoints()
+  },
+  methods: {
+    getPoints() {
+      return fetch('https://kiang.github.io/pharmacies/json/points.json')
+        .then(res => res.json())
+        .then(json => json['features'])
+    }
   }
 }
 </script>
